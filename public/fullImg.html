@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>城市印记摄影展</title>
+  <link rel="stylesheet" href="./assets/css/reset.css">
+  <script src="./assets/axios.min.js"></script>
+  <script src="./assets/vue.min.js"></script>
+  <script src="./assets/voten.js"></script>
+  <style>
+    #app {
+      position: relative;
+    }
+
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    .opts {
+      position: fixed;
+      width: 100%;
+      bottom: 80px;
+      display: flex;
+      justify-content: center;
+    }
+    .opts button {
+      border: 1px solid #caefd8;
+      background: rgba(202 , 239, 212, .2);
+      padding: 8px 20px;
+      border-radius: 8px;
+    }
+
+    .info {
+      background: rgba(0, 0, 0, .9);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      width: 70%;
+      border-radius: 8px;
+      padding: 20px;
+      color: #ffffff;
+      font-size: 16px;
+    }
+    .info h3 {
+      font-size: 18px;
+      text-align: center;
+    }
+    .info>div {
+      padding-top: 12px;
+    }
+    .label {
+      color: #cdcdcd;
+    }
+    .close {
+      position: absolute;
+      right: 16px;
+      top: 0;
+    }
+
+    .close-icon {
+      font-size: 24px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -2px;
+    }
+    .lt, .gt {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%) scaleY(1.8);
+      font-size: 24px;
+      background: rgba(0, 0, 0, .1);
+      color: #ffffff;
+      line-height: 1;
+      padding: 2px 12px;
+      border-radius: 50%;
+    }
+    .lt>span, .gt>span {
+      display: flex;
+      margin-top: -6px;
+    }
+    .lt {
+      left: 12px;
+    }
+    .gt {
+      right: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="back" @click="location.href = './list.html'">&rarrhk;</div>
+
+      <div class="arrows">
+        <div class="lt" @click="prev">
+          <span>&lt;</span>
+        </div>
+        <div class="gt" @click="next">
+          <span>&gt;</span>
+        </div>
+      </div>
+
+      <img v-if="list.length > 0" :src="list[activeIndex].url" alt="">
+
+      <section class="opts">
+        <button @click="clickInfo">作品信息</button>&nbsp;&nbsp;
+        <button @click="postVote">为他助力</button>
+      </section>
+
+      <section class="info" v-if="showInfo">
+        <div class="close" @click="showInfo = false">
+          <i class="close-icon">&times;</i>
+        </div>
+        <h3>作品信息</h3>
+        <div>
+          <span class="label">排名:</span> <span>{{active.name}}</span>
+        </div>
+        <div>
+          <span class="label">作品名:</span> <span>{{active.workName}}</span>
+        </div>
+        <div>
+          <span class="label">获得票数:</span> <span>{{active.vote_num}}票</span>
+        </div>
+        <div>
+          <span class="label">作品介绍:</span>
+          <p>{{active.workDesc}}</p>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          list: [],
+          showInfo: false,
+          activeIndex: 0,
+          activeImgId: '',
+        }
+      },
+      computed: {
+        active() {
+          return this.list[this.activeIndex]
+        }
+      },
+      mounted() {
+        this.activeImgId = decodeURI(location.search.split('=')[1])
+        this.loadList(this.activeImgId)
+      },
+      methods: {
+
+        clickInfo() {
+          toastHide()
+          this.showInfo = !this.showInfo
+        },
+
+        prev() {
+          if(this.activeIndex === 0) {
+            const nextDay = getNextDate(this.list[0].imgId.slice(0,8))
+            this.loadList(nextDay)
+            return
+          }
+          this.activeIndex = this.activeIndex - 1
+          this.activeImgId = this.list[this.activeIndex].imgId
+        },
+
+        next() {
+          if (this.activeIndex === this.list.length - 1) {
+            const prevDay= getPrevDate(this.list[this.activeIndex].imgId.slice(0, 8))
+            this.loadList(prevDay)
+            return
+          }
+          this.activeIndex = this.activeIndex + 1
+          this.activeImgId = this.list[this.activeIndex].imgId
+        },
+
+        // 根据ImgId，把今天的全部找出来
+        loadList(imgId) {
+          axios.get(`/preViewList?imgId=${imgId}`).then(({data}) => {
+            if(data.code === 0) {
+              if(data.data.length === 0) {
+                toast('没有更多数据了')
+                return
+              }
+              this.list = this.list.concat(data.data).sort((a,b) => {
+                return (+new Date(b.create_time)) - +new Date(a.create_time)
+              })
+              this.activeIndex = this.list.findIndex(n => n.imgId === this.activeImgId)
+              this.activeImgId = this.list[this.activeIndex].imgId
+              console.log(this.activeIndex);
+            }
+          })
+        },
+
+        postVote() {
+          this.showInfo = false
+
+          const today = getToday()
+          const votedList = JSON.parse(localStorage.getItem('votedList') || '[]')
+          const idx = votedList.findIndex(n => n.imgId === this.activeImgId && n.votedDay === today)
+          if(idx >= 0) {
+            toast('您今天已经助力过该作品了！')
+            return
+          }
+          const l = votedList.filter(n => n.votedDay === today)
+          if(l && l.length >= 5) {
+            toast('您今天的5次助力已用完！')
+            return
+          }
+
+          axios.post('/vote', {
+            imgId: this.activeImgId
+          }).then(({data}) => {
+            if(data.code === 0) {
+              toast('助力成功！')
+
+              votedList.push({
+                imgId: this.activeImgId,
+                votedDay: today
+              })
+              localStorage.setItem('votedList', JSON.stringify(votedList))
+
+            } else {
+              toast(data.msg)
+            }
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

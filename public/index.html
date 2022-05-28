@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>城市印记摄影展</title>
+  <link rel="stylesheet" href="./assets/css/reset.css">
+  <script src="./assets/axios.min.js"></script>
+  <script src="./assets/vue.min.js"></script>
+  <script src="./assets/voten.js"></script>
+  <style>
+    #app {
+      position: relative;
+    }
+
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: url('./assets/images/index-1.png') no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .bg-top {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70vw;
+      height: 50%;
+
+      background: url('./assets/images/index-2.png') no-repeat;
+      background-size: 100% auto;
+    }
+
+    .btns {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .btns button {
+      margin-top: 12px;
+      border: none;
+      box-shadow: 0 3px 3px 0 #888888;
+      border-radius: 8px;
+      padding: 6px 28px;
+      background: linear-gradient(#f6db96, #c1f9f7);
+    }
+
+    .btns button:active {
+      box-shadow: 0 3px 3px 0 #444444;
+    }
+
+    .mask {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, .7);
+    }
+
+    .rule {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70%;
+      border-radius: 24px;
+      background: linear-gradient(#c1f9f7, #f0f29c);
+      padding: 30px;
+    }
+
+    .close {
+      position: absolute;
+      right: 16px;
+      top: 10px;
+      border: 1px solid #4a4a4a;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+    }
+
+    .close-icon {
+      font-size: 24px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -4px;
+    }
+
+    .title {
+      display: inline-block;
+      padding: 2px 6px;
+      margin: 20px 0 4px 0;
+      box-shadow: 3px 3px 6px 0 #888888;
+      background: linear-gradient(#f6db96, #b7e9c0);
+    }
+
+    p {
+      padding-top: 6px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="bg-top"></div>
+      <div class="btns">
+        <button @click="showRule = true">活动规则</button>
+        <button @click="jumpToList">查看作品</button>
+        <button @click="jumpToUpload">上传作品</button>
+        <button @click="jumpToOrder">榜单&奖品</button>
+      </div>
+    </div>
+
+    <div class="mask" v-if="showRule" @click.self="showRule = false">
+      <div class="rule">
+        <div class="close" @click="showRule = false">
+          <i class="close-icon">&times;</i>
+        </div>
+        <h3 class="title">活动规则</h3>
+        <div>
+          <p>1. 投稿作品必须与取材于台州，于台州城市发展、城市生活有关的摄影作品，内容要求积极、向上、富含正能量；</p>
+          <p>2. 需为原创彩色照片，对上传作品拥有独立、完整、明确的著作权，并不侵犯第三人的合法权益；</p>
+          <p>3. 进行线上网络投票，邀请好友助力投票</p>
+          <p>4. 本次摄影大赛解释权属于主办单位。凡投稿参赛者，即视为同意本地征集活动的所有规定。</p>
+        </div>
+        <h3 class="title">活动日期：5月30日-6月14日</h3>
+        <p>* 每人每天5次投票机会，每人每天仅可给同1人助力1次。</p>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          showRule: false
+        }
+      },
+      mounted() {
+
+      },
+      methods: {
+        jumpToOrder() {
+          location.href = './rank.html'
+        },
+        jumpToUpload() {
+          location.href = './upload.html'
+        },
+        jumpToList() {
+          location.href = './list.html'
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

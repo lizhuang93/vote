@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>城市印记摄影展</title>
+  <link rel="stylesheet" href="./assets/css/reset.css">
+  <link rel="stylesheet" href="./assets/css/waterfall.css">
+  <script src="./assets/axios.min.js"></script>
+  <script src="./assets/vue.min.js"></script>
+  <script src="./assets/voten.js"></script>
+  <script src="./assets/waterfall.js"></script>
+  <style>
+    #app {
+      position: relative;
+      padding: 0 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="back" @click="location.href = './index.html'">&rarrhk;</div>
+    <div id="waterfall"></div>
+    <div class="loader" id="loader" v-if="!isEnd">
+      <div class="loader-inner line-spin-fade-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      components: {
+        
+      },
+      data() {
+        return {
+          pageNo:1,
+          pageSize: 10,
+          isEnd: false,
+          imgsArr: []
+        }
+      },
+      mounted() {
+
+        // https://github.com/mqyqingfeng/waterfall
+        var waterfall = new WaterFall({
+          container: '#waterfall',
+          pins: ".pin",
+          loader: '#loader',
+          gapHeight: 2,
+          gapWidth: 2,
+          pinWidth: Math.floor((window.screen.width - 4 - 24) / 3),
+          threshold: 100
+        });
+
+        waterfall.on("load",  () => {
+          if(this.isEnd) {
+            return
+          }
+          axios.post('/list', {
+            pageNo: this.pageNo++,
+            pageSize: this.pageSize
+          }).then(({data}) => {
+
+            if(data.code === 0) {
+              this.isEnd = data.data.length === 0
+              this.imgsArr = data.data
+
+              const arr = []
+              this.imgsArr.forEach(item => {
+                const href = `./fullImg.html?imgId=${encodeURI(item.imgId)}`
+                arr.push(`<div class="pin"><a href="${href}"><img src="${item.url}" class="img"></a>`)
+              })
+              waterfall.append(arr.join(''), '.img')
+            }
+          })
+          
+        })
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>
