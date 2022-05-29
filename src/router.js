@@ -70,7 +70,7 @@ router.post(
   async (ctx, next) => {
     try {
       const { pageNo, pageSize } = ctx.request.body
-      const sql = `select * from user where del=0 order by create_time limit ${(pageNo - 1) * pageSize}, ${pageSize}`
+      const sql = `select * from user where del=0 order by create_time desc limit ${(pageNo - 1) * pageSize}, ${pageSize}`
       const countSql = `select count(*) from user where del=0`
       const rows = await db.query(sql)
       const total = await db.query(countSql)

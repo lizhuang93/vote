@@ -186,7 +186,7 @@
             return
           }
           this.uploading = true
-          lrz(this.file, { quality: 0.75}).then(rst => {
+          lrz(this.file, { width: 500, quality: 0.5}).then(rst => {
             console.log('rst', rst);
             this.upload({
               url: "/upload/single",
