@@ -11,7 +11,7 @@
   <script src="./assets/vue.min.js"></script>
   <script src="./assets/voten.js"></script>
   <script src="./assets/lrz.all.bundle.js"></script>
-  <script src="//unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+  <!-- <script src="//unpkg.com/vconsole@latest/dist/vconsole.min.js"></script> -->
   <style>
     #app {
       position: relative;
@@ -145,7 +145,7 @@
     </div>
   </div>
   <script>
-    var vConsole = new VConsole();
+    // var vConsole = new VConsole();
     localStorage.setItem('myImgId', '')
     const app = new Vue({
       el: '#app',
@@ -173,6 +173,10 @@
           this.file = e.target.files[0]
           console.log(this.file);
           this.previewUrl = window.URL.createObjectURL(this.file)
+          // lrz(this.file, { width: 500, quality: 0.5 }).then(rst => {
+          //   this.previewUrl = window.URL.createObjectURL(rst.file)
+          // })
+          
         },
         submit() {
       

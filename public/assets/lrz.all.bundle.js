@@ -1800,6 +1800,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Orientation value is from EXIF tag
 	     */
 	    function transformCoordinate (canvas, ctx, width, height, orientation) {
+        
+          console.log('transformCoordinate', orientation);
+
 	        switch (orientation) {
 	            case 5:
 	            case 6:
@@ -2709,19 +2712,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        orientation = that.orientation;
 
 	    // 调整为正确方向
+      console.log('_createBase64', orientation);
 	    switch (orientation) {
-	        case 3:
-	            ctx.rotate(180 * Math.PI / 180);
-	            ctx.drawImage(img, -resize.width, -resize.height, resize.width, resize.height);
-	            break;
-	        case 6:
-	            ctx.rotate(90 * Math.PI / 180);
-	            ctx.drawImage(img, 0, -resize.width, resize.height, resize.width);
-	            break;
-	        case 8:
-	            ctx.rotate(270 * Math.PI / 180);
-	            ctx.drawImage(img, -resize.height, 0, resize.height, resize.width);
-	            break;
+	        // case 3:
+	        //     ctx.rotate(180 * Math.PI / 180);
+	        //     ctx.drawImage(img, -resize.width, -resize.height, resize.width, resize.height);
+	        //     break;
+	        // case 6:
+	        //     ctx.rotate(90 * Math.PI / 180);
+	        //     ctx.drawImage(img, 0, -resize.width, resize.height, resize.width);
+	        //     break;
+	        // case 8:
+	        //     ctx.rotate(270 * Math.PI / 180);
+	        //     ctx.drawImage(img, -resize.height, 0, resize.height, resize.width);
+	        //     break;
 
 	        case 2:
 	            ctx.translate(resize.width, 0);
