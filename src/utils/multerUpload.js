@@ -1,6 +1,6 @@
 const multer = require("@koa/multer");
 const { UPLOAD_DIR} = require('../../config/const')
-const { getDate } = require('./helper')
+const { getDate, getUrlParams } = require('./helper')
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
@@ -9,7 +9,9 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     // 设置文件名
-    cb(null, `${getDate()}${file.originalname}`);
+    console.log(getUrlParams(req.url));
+    
+    cb(null, `${getDate()}${getUrlParams(req.url).mobile}${file.originalname}`);
   },
 });
 

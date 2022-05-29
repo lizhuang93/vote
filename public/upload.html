@@ -11,6 +11,7 @@
   <script src="./assets/vue.min.js"></script>
   <script src="./assets/voten.js"></script>
   <script src="./assets/lrz.all.bundle.js"></script>
+  <script src="//unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
   <style>
     #app {
       position: relative;
@@ -144,6 +145,8 @@
     </div>
   </div>
   <script>
+    var vConsole = new VConsole();
+    localStorage.setItem('myImgId', '')
     const app = new Vue({
       el: '#app',
       data() {
@@ -188,8 +191,9 @@
           this.uploading = true
           lrz(this.file, { width: 500, quality: 0.5}).then(rst => {
             console.log('rst', rst);
+
             this.upload({
-              url: "/upload/single",
+              url: "/upload/single?mobile=" + this.form.mobile,
               rst: rst
             }).then(({ data }) => {
               if (data.code === 0) {

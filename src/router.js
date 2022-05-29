@@ -17,7 +17,10 @@ router.post(
   async (ctx, next) => {
     try {
       await next();
-      const imgId = `${getDate()}${ctx.file.originalname}`
+      const {mobile} = ctx.request.query
+      console.log('mobile',mobile);
+      const imgId = `${getDate()}${mobile}${ctx.file.originalname}`
+      console.log('ctx.file->', ctx.file);
       const sql = `select * from user where imgId='${imgId}' and del=0`
       const rows = await db.query(sql)
       if(rows.length > 0) {

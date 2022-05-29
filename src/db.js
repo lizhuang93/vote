@@ -6,10 +6,10 @@ function query(sql) {
       
 
       host: 'localhost',
-      // password: 'Lz931130',
       // host: '39.98.139.162',
-      password: 'root',
       user: 'root',
+      password: 'Lz931130',
+      // password: 'root',
       database: 'vote',
     });
     connection.connect();
