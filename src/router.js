@@ -18,7 +18,7 @@ router.post(
     try {
       await next();
       const imgId = `${getDate()}${ctx.file.originalname}`
-      const sql = `select * from user where imgId='${imgId}'`
+      const sql = `select * from user where imgId='${imgId}' and del=0`
       const rows = await db.query(sql)
       if(rows.length > 0) {
         ctx.body = {
@@ -70,12 +70,15 @@ router.post(
   async (ctx, next) => {
     try {
       const { pageNo, pageSize } = ctx.request.body
-      const sql = `select * from user order by create_time limit ${(pageNo - 1) * pageSize}, ${pageSize}`
+      const sql = `select * from user where del=0 order by create_time limit ${(pageNo - 1) * pageSize}, ${pageSize}`
+      const countSql = `select count(*) from user where del=0`
       const rows = await db.query(sql)
+      const total = await db.query(countSql)
       ctx.body = {
         code: 0,
         msg: 'ok',
-        data: rows
+        data: rows,
+        total: total[0]['count(*)']
       }
     } catch (error) {
       ctx.body = {
@@ -93,7 +96,7 @@ router.get(
     try {
       const {imgId} = ctx.request.query
       const date = imgId.slice(0, 8)
-      const sql = `select * from user where imgId like '${date}%' order by create_time`
+      const sql = `select * from user where imgId like '${date}%' and del=0 order by create_time`
       const rows = await db.query(sql)
       ctx.body = {
         code: 0,
@@ -136,7 +139,7 @@ router.get(
   "/rank",
   async (ctx, next) => {
     try {
-      const sql = `select * from user order by vote_num desc limit 0, 10`
+      const sql = `select * from user where del=0 order by vote_num desc limit 0, 10`
       const rows = await db.query(sql)
       ctx.body = {
         code: 0,
@@ -158,7 +161,7 @@ router.get(
   async (ctx, next) => {
     try {
       const {imgId} = ctx.request.query
-      const sql = `select imgId from user order by vote_num desc `
+      const sql = `select imgId from user where del=0 order by vote_num desc `
       const rows = await db.query(sql)
       const idx = rows.findIndex(row => row.imgId === imgId)
       ctx.body = {
@@ -170,6 +173,28 @@ router.get(
       ctx.body = {
         code: 6,
         msg: '查询失败'
+      }
+    }
+  },
+
+);
+
+
+router.post(
+  "/del",
+  async (ctx, next) => {
+    try {
+      const { imgId } = ctx.request.body
+      const sql = `update user set del=1 where imgId='${imgId}'`
+      const rows = await db.query(sql)
+      ctx.body = {
+        code: 0,
+        msg: 'ok',
+      }
+    } catch (error) {
+      ctx.body = {
+        code: 5,
+        msg: '投票失败'
       }
     }
   },
