@@ -2683,7 +2683,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        !/* require */(/* empty */function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(7)]; (function (MegaPixImage) {
 	            var mpImg = new MegaPixImage(img);
 
-	            if ("5678".indexOf(orientation) > -1) {
+	            if ("57".indexOf(orientation) > -1) {
 	                mpImg.render(canvas, {
 	                    width      : canvas.height,
 	                    height     : canvas.width,
@@ -2783,7 +2783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        height: img.height
 	    };
 
-	    if ("5678".indexOf(orientation) > -1) {
+	    if ("57".indexOf(orientation) > -1) {
 	        ret.width  = img.height;
 	        ret.height = img.width;
 	    }
