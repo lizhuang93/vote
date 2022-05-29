@@ -13,17 +13,21 @@
   <script src="./assets/voten.js"></script>
   <script src="./assets/waterfall.js"></script>
   <style>
-    #app {
+    .water-fall-wrap {
       position: relative;
-      padding: 0 12px;
+      padding: 62px 12px 0;
     }
   </style>
 </head>
 
 <body>
   <div id="app">
-    <div class="back" @click="location.href = './index.html'">&rarrhk;</div>
-    <div id="waterfall"></div>
+    <div class="back-wrap">
+      <div class="back" @click="location.href = './index.html'"></div>
+    </div>
+    <div class="water-fall-wrap">
+      <div id="waterfall"></div>
+    </div>
     <div class="loader" id="loader" v-if="!isEnd">
       <div class="loader-inner line-spin-fade-loader">
         <div></div>

@@ -27,7 +27,7 @@
     .logo {
       width: 70%;
       height: 120px;
-      margin: 20px auto;
+      margin: 60px auto 0;
       background: url(./assets/images/order-2.png) no-repeat;
       background-size: 100% auto;
     }
@@ -96,7 +96,9 @@
 
 <body>
   <div id="app">
-    <div class="back" @click="location.href = './index.html'">&rarrhk;</div>
+        <div class="back-wrap">
+          <div class="back" @click="location.href = './index.html'"></div>
+        </div>
     <div class="bg-left">
       <div class="logo"></div>
       <div class="txt"></div>

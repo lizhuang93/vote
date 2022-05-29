@@ -10,6 +10,7 @@
   <script src="./assets/axios.min.js"></script>
   <script src="./assets/vue.min.js"></script>
   <script src="./assets/voten.js"></script>
+  <script src="./assets/lrz.all.bundle.js"></script>
   <style>
     #app {
       position: relative;
@@ -84,7 +85,8 @@
       border: none;
       box-shadow: 0 3px 3px 0 #888888;
       border-radius: 4px;
-      padding: 6px 28px;
+      padding: 10px 36px;
+      font-size: 16px;
       background: linear-gradient(#f6db96, #c1f9f7);
     }
     .btn.disabled {
@@ -96,7 +98,9 @@
 <body>
   <div id="app">
     <div class="container">
-      <div class="back" @click="location.href = './index.html'">&rarrhk;</div>
+          <div class="back-wrap">
+            <div class="back" @click="location.href = './index.html'"></div>
+          </div>
 
       <section class="form">
         <div>
@@ -130,7 +134,7 @@
         <div><i class="red">*</i> 均为必填</div>
         <div class="btn-wrap">
           <button v-if="isJoin" class="btn disabled" disabled>已参加</button>
-          <button v-else class="btn" @click="submit" :disabled="uploading">点击上传作品</button>
+          <button v-else class="btn" @click="submit" :disabled="uploading">{{uploading ? '上传中...' : '点击上传作品' }}</button>
         </div>
       </section>
       
@@ -174,28 +178,31 @@
             toast('仅支持上传图片！')
             return
           }
-          if(this.file.size > 50 * 1024 * 1024) {
+          if(this.file.size > 5 * 1024 * 1024) {
             toast('请选择小于5M的图片！')
             return
           }
           this.uploading = true
-          this.upload({
-            url: "/upload/single",
-            file: this.file,
-          }).then(({data}) => {
-            if(data.code === 0) {
-              this.postForm(data)
-            } else {
-              this.uploading = false
-              toast(data.msg)
-            }
+          lrz(this.file, { quality: 0.75}).then(rst => {
+            console.log('rst', rst);
+            this.upload({
+              url: "/upload/single",
+              rst: rst
+            }).then(({ data }) => {
+              if (data.code === 0) {
+                this.postForm(data)
+              } else {
+                this.uploading = false
+                toast(data.msg)
+              }
+            })
           })
+
+
         },
 
-        upload({ url, file, fieldName = "file" }) {
-          let formData = new FormData();
-          formData.set(fieldName, file);
-          return axios.post(url, formData, {
+        upload({ url, rst, fieldName = "file" }) {
+          return axios.post(url, rst.formData, {
             // 监听上传进度
             onUploadProgress: function (progressEvent) {
               const percentCompleted = Math.round(

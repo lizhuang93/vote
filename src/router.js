@@ -148,7 +148,7 @@ router.get(
       }
     } catch (error) {
       ctx.body = {
-        code: 6,
+        code: 8,
         msg: '查询失败'
       }
     }
@@ -171,7 +171,7 @@ router.get(
       }
     } catch (error) {
       ctx.body = {
-        code: 6,
+        code: 9,
         msg: '查询失败'
       }
     }
@@ -193,12 +193,43 @@ router.post(
       }
     } catch (error) {
       ctx.body = {
-        code: 5,
+        code: 10,
         msg: '投票失败'
       }
     }
   },
 
 );
+
+router.get(
+  "/pwd",
+  async (ctx, next) => {
+    try {
+      const { pwd } = ctx.request.query
+      const sql = `select * from pwd where pwd='${pwd}'`
+      const rows = await db.query(sql)
+      console.log(rows);
+      if(rows.length > 0) {
+        ctx.body = {
+          code: 0,
+          msg: 'ok'
+        }
+      }else {
+        ctx.body = {
+          code: 11,
+          msg: '口令错误'
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      ctx.body = {
+        code: 12,
+        msg: '查询失败'
+      }
+    }
+  },
+
+);
+
 
 module.exports = router

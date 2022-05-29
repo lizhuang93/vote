@@ -21,6 +21,10 @@
     .pageNav {
       text-align: right;
     }
+    .red {
+      padding-top: 8px;
+      color: red;
+    }
   </style>
 </head>
 
@@ -31,6 +35,7 @@
     <Page class="pageNav" :total="total" show-total show-elevator @on-change="pageChange"></Page>
     <Modal v-model="isShowEntry" title="请输入口令" @on-ok="confirm" @on-cancel="cancel">
       <i-input v-model="pwd" placeholder="请输入口令"></i-input>
+      <p class="red" v-if="isError">口令错误，请重新输入</p>
     </Modal>
   </div>
   <script>
@@ -38,6 +43,7 @@
       el: '#app',
       data() {
         return {
+          isError: false,
           isShowEntry: true,
           pwd: '',
           pageNo: 1,
@@ -133,8 +139,17 @@
           })
         },
         confirm() {
-          if (this.pwd === 'admin147258') {
-            this.loadList()
+          if (this.pwd) {
+            axios.get('/pwd?pwd='+this.pwd).then(({data}) => {
+              if(data.code === 0) {
+                this.loadList()
+                this.isError = false
+              } else {
+                this.isError = true
+                this.isShowEntry = true
+              }
+            })
+            
           }
         },
         cancel() {
