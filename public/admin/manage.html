@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
   <!-- 引入组件库 -->
   <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+  <script src="../assets/day.js"></script>
   <style>
     #app {
       position: relative;
@@ -102,7 +103,7 @@
             },
             {
               title: '上传时间',
-              key: 'create_time',
+              key: 'formatTime',
             },
             {
               title: '操作',
@@ -134,7 +135,10 @@
             pageNo: this.pageNo,
             pageSize: this.pageSize
           }).then(({ data }) => {
-            this.list = data.data
+            this.list = data.data.map(i => {
+              i.formatTime = dayjs(i.create_time).format('YYYY-MM-DD HH:mm:ss')
+              return i
+            })
             this.total = data.total
           })
         },
