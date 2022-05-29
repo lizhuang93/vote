@@ -13,8 +13,7 @@ body {
 #waterfall {
     position: relative;
     width: 100%;
-    min-height: 500px;
-    background-color: #edece9;
+    min-height: 100vh;
 }
 
 .pin {
