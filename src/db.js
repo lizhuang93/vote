@@ -3,10 +3,13 @@ const mysql = require('mysql');
 function query(sql) {
   return new Promise((resolve, reject) => {
     const connection = mysql.createConnection({
-      // host: 'localhost',
-      host: '39.98.139.162',
-      user: 'root',
+      
+
+      host: 'localhost',
+      // password: 'Lz931130',
+      // host: '39.98.139.162',
       password: 'root',
+      user: 'root',
       database: 'vote',
     });
     connection.connect();
