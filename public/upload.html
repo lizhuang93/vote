@@ -96,6 +96,45 @@
     .back-wrap {
       background-color: transparent;
     }
+    .mask {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .rule {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+      border-radius: 12px;
+      background-color: #4a4a4a;
+      padding: 30px;
+      color: #ffffff;
+      text-align: center;
+    }
+    .rule h3 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .no {
+      padding-top: 16px;
+    }
+    .tip {
+      padding: 2px 0 8px 0;
+      font-size: 13px;
+      color: #dddddd;
+    }
+    .back-btn {
+      color: #4a4a4a;
+      border: none;
+      background: #ffffff;
+      padding: 6px 20px;
+      border-radius: 8px;
+    }
   </style>
 </head>
 
@@ -142,6 +181,16 @@
         </div>
       </section>
       
+
+      <div class="mask" v-if="showSuccess" @click.self="showRule = false">
+        <div class="rule">
+          <h3>上传成功！</h3>
+          <p class="no">作品编号: {{no}}</p>
+          <p class="tip">*点击右上角邀请助力</p>
+          <button class="back-btn" @click="backHome">返回首页</button>
+        </div>
+      </div>
+
     </div>
   </div>
   <script>
@@ -153,8 +202,10 @@
         return {
           isJoin: false,
           uploading: false,
+          showSuccess: false,
           file: null,
           previewUrl: '',
+          no: '',
           form: {
             name: "",
             mobile: "",
@@ -230,15 +281,19 @@
           axios.post('addWork', this.form).then(({data}) => {
             if(data.code === 0) {
               localStorage.setItem('myImgId', this.form.imgId)
-              toast('保存成功!')
-              setTimeout(() => {
-                location.href = './index.html'
-              }, 2000)
+              localStorage.setItem('id', data.id)
+              this.no = formatNo(data.id)
+              this.showSuccess = true
+              
             } else {
               toast(data.msg)
             }
             this.uploading = false
           })
+        },
+
+        backHome() {
+          location.href = './index.html'
         }
       }
     })

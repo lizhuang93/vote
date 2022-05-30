@@ -85,7 +85,7 @@
               const arr = []
               this.imgsArr.forEach(item => {
                 const href = `./fullImg.html?imgId=${encodeURI(item.imgId)}`
-                arr.push(`<div class="pin"><a href="${href}"><img src="${item.url}" class="img"></a>`)
+                arr.push(`<div class="pin"><a href="${href}"><img src="${item.url}" class="img"></a><p class="wt-no">${formatNo(item.id)}</p>`)
               })
               waterfall.append(arr.join(''), '.img')
             }

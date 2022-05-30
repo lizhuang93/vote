@@ -101,6 +101,18 @@
     .gt {
       right: 12px;
     }
+    .img-wrap {
+      position: relative;
+    }
+    .no {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: rgba(0,0,0,.3);
+      color: #ffffff;
+      padding: 4px;
+      line-height: 1;
+    }
   </style>
 </head>
 
@@ -120,11 +132,14 @@
         </div>
       </div>
 
-      <img v-if="list.length > 0" :src="list[activeIndex].url" alt="">
+      <div class="img-wrap">
+        <img v-if="list.length > 0" :src="list[activeIndex].url" alt="">
+        <p class="no">{{formatNo(active.id)}}</p>
+      </div>
 
       <section class="opts">
         <button @click="clickInfo">作品信息</button>&nbsp;&nbsp;
-        <button @click="postVote">为他助力</button>
+        <button @click="postVote">为TA助力</button>
       </section>
 
       <section class="info" v-if="showInfo">

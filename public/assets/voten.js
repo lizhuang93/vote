@@ -51,3 +51,7 @@ function getNextDate(date) {
   const day = `0${d.getDate()}`.substr(-2)
   return `${year}${month}${day}`
 }
+
+function formatNo(no) {
+  return 'No.' + `000${no}`.substr(-4)
+}

@@ -8,8 +8,8 @@ function query(sql) {
       host: 'localhost',
       // host: '39.98.139.162',
       user: 'root',
-      password: 'Lz931130',
-      // password: 'root',
+      // password: 'Lz931130',
+      password: 'root',
       database: 'vote',
     });
     connection.connect();

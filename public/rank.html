@@ -47,7 +47,7 @@
       padding: 12px 20px;
     }
     .my-order {
-      font-size: 22px;
+      font-size: 17px;
       font-weight: 700;
     }
     .list {
@@ -105,7 +105,7 @@
     </div>
 
     <div class="list-wrap" >
-      <h3 class="my-order" v-if="myRank > 0">我的排行：第{{myRank}}位</h3>
+      <h3 class="my-order" v-if="myRank > 0">我的排行-第{{myRank}}位 编号{{formatNo(id)}}</h3>
       <h3 class="my-order" v-else>我的排行：暂无信息</h3>
       <div class="list">
         <div class="item" v-for="(item, idx) in list" :key="item.id">
@@ -129,10 +129,12 @@
       data() {
         return {
           list: [],
-          myRank: -1
+          myRank: -1,
+          id: ''
         }
       },
       mounted() {
+        this.id = localStorage.getItem('id') || ''
         this.loadMyRank()
         this.loadRank()
       },

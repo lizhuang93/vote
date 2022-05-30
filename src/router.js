@@ -56,7 +56,8 @@ router.post(
       const rows = await db.query(sql)
       ctx.body = {
         code: 0,
-        msg: 'ok'
+        msg: 'ok',
+        id: rows.insertId
       }
     } catch (error) {
       ctx.body = {
