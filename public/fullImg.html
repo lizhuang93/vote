@@ -38,7 +38,7 @@
     .opts button {
       color: #caefd8;
       border: 1px solid #caefd8;
-      background: rgba(202 , 239, 212, .2);
+      background: #4a4a4a;
       padding: 8px 20px;
       border-radius: 8px;
     }
@@ -90,6 +90,7 @@
       line-height: 1;
       padding: 2px 12px;
       border-radius: 50%;
+      z-index: 99;
     }
     .lt>span, .gt>span {
       display: flex;
@@ -134,7 +135,7 @@
 
       <div class="img-wrap">
         <img v-if="list.length > 0" :src="list[activeIndex].url" alt="">
-        <p class="no">{{formatNo(active.id)}}</p>
+        <p class="no" v-if="active.id">{{formatNo(active.id)}}</p>
       </div>
 
       <section class="opts">
@@ -178,7 +179,7 @@
       },
       computed: {
         active() {
-          return this.list[this.activeIndex]
+          return this.list[this.activeIndex] || {}
         }
       },
       mounted() {
